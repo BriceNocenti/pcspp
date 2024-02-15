@@ -1,0 +1,4 @@
+^LICENSE\.md$
+^pcspp.Rproj$
+^.*\.Rproj$
+^\.Rproj\.user$

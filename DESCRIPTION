@@ -1,0 +1,27 @@
+Package: pcspp
+Title: French PCS Recoded for Public-Private Comparisons
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Brice",
+           family = "Nocenti",
+           role = c("aut", "cre"),
+           email = "brice.nocenti@gmail.com")
+Description: French PCS recoded for public-private comparisons.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Imports: 
+    dplyr (>= 1.0.3),
+    forcats (>= 0.5.0),
+    magrittr (>= 1.5.0),
+    purrr (>= 0.3.0),
+    rlang (>= 0.4.0),
+    stringi (>= 1.4.6),
+    stringr (>= 1.4.0),
+    tabxplor (>= 1.0.1),
+    tibble (>= 3.1.0),
+    tidyr (>= 1.0.0),
+    tidyselect (>= 1.0.0),
+    vctrs (>= 0.3.0)
