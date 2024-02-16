@@ -5,6 +5,8 @@
 # pcspp : PCS recodées pour comparaison public-privé
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/BriceNocenti/pcspp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/BriceNocenti/pcspp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 À partir du niveau détaillé de la [nomenclature des
@@ -42,7 +44,7 @@ Pour le détail du fonctionnement de cette fonction voir la documentation
 ```
 
 Cf. également la [table de passage entre nomenclature PCS et
-PcsPP](https://github.com/BriceNocenti/pcspp/blob/main/resources/PcsPP_PCS_tab.xlsx),
+PcsPP](https://github.com/BriceNocenti/pcspp/blob/master/resources/PcsPP_PCS_tab.xlsx),
 au niveau des professions détaillées.
 
 ### `PPP1` : sept groupes socioprofessionnels agrégés

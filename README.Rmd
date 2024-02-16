@@ -28,6 +28,7 @@ ee18_readme_tab <- ee18_readme_tab |>
 # pcspp : PCS recodées pour comparaison public-privé
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/BriceNocenti/pcspp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/BriceNocenti/pcspp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 À partir du niveau détaillé de la [nomenclature des PCS](https://www.nomenclature-pcs.fr/) de l'INSEE, ce package fournit une nouvelle nomenclature destinée à faciliter la comparaison entre salarié·es des administrations publiques et salarié·es des entreprises en France.
@@ -56,7 +57,7 @@ Pour le détail du fonctionnement de cette fonction voir la documentation :
 ?pcspp::pcspp
 ```
 
-Cf. également la [table de passage entre nomenclature PCS et PcsPP](https://github.com/BriceNocenti/pcspp/blob/main/resources/PcsPP_PCS_tab.xlsx), au niveau des professions détaillées.
+Cf. également la [table de passage entre nomenclature PCS et PcsPP](https://github.com/BriceNocenti/pcspp/blob/master/resources/PcsPP_PCS_tab.xlsx), au niveau des professions détaillées.
 
 
 ### `PPP1` : sept groupes socioprofessionnels agrégés

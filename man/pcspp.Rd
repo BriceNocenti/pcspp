@@ -19,28 +19,27 @@ pcspp(
 )
 }
 \arguments{
-\item{data}{La base de données à partir de laquelle recoder les PCS.}
+\item{data}{La base de données dans laquelle effectuer les recodages.}
 
 \item{profession}{Le nom de la variable professions détaillées. Souvent \code{P} ou \code{PE}
 dans les bases fournies par l'INSEE.}
 
-\item{admin_ent}{Le nom d'une variable binaire avec deux modalités permettant de
-différencier secteur marchand et secteur public administratifs : la première modalité
-doit correspondre aux administrations publiques, et la seconde au secteur de droit
-privé. Attention à ne pas inclure les entreprises publiques parmi les administrations.}
+\item{admin_ent}{Le nom d'une variable catégorielle dont la première modalité
+correspond aux administrations publiques (pour les différencier du secteur marchand).
+Attention à ne pas inclure les entreprises publiques parmi les administrations.}
 
 \item{nomenclaturePCS}{Quelle version de la nomemclature PCS la variable professions
-utilise-t-elle ? 2003 par default, 1982 possible, 2020 non encore disponible.}
+utilise-t-elle ? \code{"2003"} par default, \code{"1982"} possible, 2020 non encore disponible.}
 
 \item{sexeEE}{Par default, si aucune variable \code{sexe} n'est précisée, le calcul du taux
 de féminisation est réalisé à partir de tableaux issus des enquêtes Emploi empilées
-sur 1982-2018. Il est alors possible de sélectionner une année parmi celles disponsibles,
+sur 1982-2018. Il est alors possible de sélectionner une année parmi celles disponibles,
 ou de faire la moyenne sur plusieurs années, en renseignant une suite de nombre entiers
 (integer vector). Par défault \code{2015:2018} (2015 à 2018).}
 
 \item{sexe}{Une seconde possibilité est de fournir le nom d'une variable sexe présente
 dans la base de données pour calculer le taux de féminisation. Pour être détectées les
-modalités de variables doivent contenir les chaînes de caractères "hemme"/"homme",
+modalités de variables doivent contenir les chaînes de caractères "femme"/"homme",
 "masculin"/"féminin" ou "man"/"woman".}
 
 \item{sexe_wt}{Si une variable \code{sexe} est fournie, il est possible de fournir le nom
@@ -50,7 +49,7 @@ de la variable de pondération à utiliser.}
 la forme d'une vecteur numérique de taille 1 ou 2. Le premier élément est le seuil
 en-dessous duquel les noms de professions sont conjugués au masculin (par default 33.3\%).
 Le second élément est le seuil en-dessus duquel ils sont conjugués au féminin
-(par default 66.6\%). Entre les deux seuils, l'écriture inclusive avec point médian est
+(par default 66.6\%). Entre les deux seuils, la forme inclusive avec point médian est
 utilisée. Pour empêcher ce comportement, il est possible de ne préciser qu'un seul seuil.}
 
 \item{gender_sign}{Par default, ajoute les symboles male et femelle lorsque le nom
@@ -90,14 +89,18 @@ l'enquête Emploi 2014-2018).
 }
 }
 \description{
-Ces PCS recodées visent à faciliter la comparaison entre public et privé.
-Il s'agit de construire des familles de métier comparables entre fonction publique
+Ces catégories socioprofessionnelles, recodées à partir de la
+\href{https://www.nomenclature-pcs.fr/}{nomenclature des PCS} de l'INSEE,
+visent à faciliter la comparaison entre public et privé.
+Il s'agit de construire des familles de métier comparables entre administrations publiques
 et entreprises : les professions classées « Administration publique » par la
 nomenclature FAP sont ventilées dans les familles professionnelles du secteur marchand,
-en s'inspirant des familles de métiers de la fonction publique. Nous distinguons ainsi
+en s'inspirant des
+\href{https://www.fonction-publique.gouv.fr/files/files/ArchivePortailFP/www.fonction-publique.gouv.fr/la-nomenclature-fapfp-de-familles-de-metiers-de-la-fonction-publique.html}{nomenclature FaPFP des familles de métiers de la fonction publique}
+de la DGAFP. Nous distinguons ainsi
 différentes filières, commerciale, financière, administrative, technique, santé, etc.,
 au sein desquelles une hiérarchie de métiers peut être comparée entre administrations
-et entreprises. Les professionnels reconnus comme les médecins, les infirmières ou
+et entreprises. Les professions organisées comme les médecins, les infirmières ou
 les enseignantes sont distingués des cols blancs (de niveau cadre ou de
 niveau subalerne), car leur proportion s'avère très différence dans les entreprises
 et dans les administrations. Certaines recommandations du Conseil national de
@@ -105,10 +108,8 @@ l'information statistique sont prises en compte (Amossé, Chardon et Eidelman, 2
 des "professions intermédiaires" de la fonction publique, classées A et apparentées
 aux cadres du point du vue du diplôme et/ou du salaire, passent notamment au niveau
 de qualification supérieur (cadres de santé, cadres du social, cadres de l’armée).
-La règle de féminisation des noms de professions suivante est adoptée par défaut :
+Pour rendre visible la place des femmes dans la structure sociale,
+la règle de féminisation des noms de professions suivante est adoptée par défaut :
 masculin s’il y a plus de deux tiers d’hommes dans une profession ; féminin s’il y a
 plus de deux tiers de femmes ; forme inclusive s’il y a entre 33\% et 66\% de femmes.
-La féminisation n'est donc pas utilisées à des fins politiques d'inclusion symbolique,
-mais pour transmettre de l’information sociologique en rendant visible la place des
-femmes dans la structure sociale.
 }
