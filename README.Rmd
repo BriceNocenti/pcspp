@@ -1,0 +1,180 @@
+---
+output: 
+  github_document:
+    df_print: kable
+---
+<!-- df_print: !expr print_tab <- function(x) kableExtra:::knit_print.kableExtra(kableExtra::kable_classic(kableExtra::kable(x), lightable_options = 'hover', full_width = FALSE, html_font = 'DejaVu Sans Condensed')) -->
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, warning = FALSE, message = FALSE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+
+library(tidyverse)
+library(tabxplor)
+
+ee18_readme_tab <- readRDS("resources/ee18_readme_tab.rds")
+ee18_readme_tab <- ee18_readme_tab |> 
+  mutate(EMP_ADM_ENT = fct_relabel(EMP_ADM_ENT, ~ str_remove_all(., tabxplor:::cleannames_condition())))
+
+
+```
+
+# pcspp : PCS recodées pour comparaison public-privé
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+À partir du niveau détaillé de la [nomenclature des PCS](https://www.nomenclature-pcs.fr/) de l'INSEE, ce package fournit une nouvelle nomenclature destinée à faciliter la comparaison entre salarié·es des administrations publiques et salarié·es des entreprises en France.
+
+## Installation
+
+Installer pcspp à partir de github avec :
+```r
+# install.packages(devtools)
+devtools::install_github("BriceNocenti/pcspp")
+```
+
+## Usage
+
+Pour ajouter les variables PcsPP dans une base de données, à partir de la PCS « à quatre chiffre » (profession détaillée) et d'une variable permettant de distinguer les administrations publiques des entreprises : 
+
+```{r, eval = FALSE, echo = TRUE}
+data <- data |> 
+  pcspp::pcspp(profession = P, admin_ent = EMP_ADM_ENT, 
+               nomenclaturePCS = "2003", sexeEE = 2018L)
+```
+
+Pour le détail du fonctionnement de cette fonction voir la documentation : 
+
+```{r, eval = FALSE, echo = TRUE}
+?pcspp::pcspp
+```
+
+Cf. également la [table de passage entre nomenclature PCS et PcsPP](https://github.com/BriceNocenti/pcspp/blob/main/resources/PcsPP_PCS_tab.xlsx), au niveau des professions détaillées.
+
+
+### `PPP1` : sept groupes socioprofessionnels agrégés
+
+Le premier niveau des PcsPP, en sept catégories, est un peu différent des six groupes socioprofessionnels classiques de la nomenclature PCS.
+
+**Tableau 1. CSP recodée agrégée PPP1 en fonction du type d'employeur en 2018**
+```{r, echo = FALSE}
+  tabxplor::tab(ee18_readme_tab, PPP1, EMP_ADM_ENT, wt = n)
+```
+
+ <font size=2> Source : INSEE, Enquête Emploi 2018. </font>
+
+ <font size=2> Champ : actifs occupés, France (hors Mayotte).</font>
+
+Le niveau regroupé de la nomenclature des professions et catégories socioprofessionnelles (PCS) s’avère ici peu adapté. Les « professions intermédiaires » et les « cadres et professions supérieures » agrègent des agent·es très inséré·es dans des organisations hiérarchisées, et des professions organisées jouissant d’une forte autonomie collective (médecins, enseignant·es, etc.) : les deux ont souvent des organisations du travail éloignées, et leurs proportions s'avèrent très différentes entre entreprises et administrations (en France il y a davantage de professionnel·les reconnu·es dans le secteur public). 
+
+**Parmi les salariés**, nous utilisons donc ici les regroupements suivants : 
+
+- **Cols-blancs** : il s’agit de l’ensemble des métiers qualifiés des entreprises et des administrations dévolus à des tâches d’organisation, de commandement, de gestion, de conception et de vente.
+
+    - **Cadres** : le groupe des cadres au sens strict comprend les cols blancs du niveau de qualification supérieur. Son cœur est composé des CSP 33-Cadres de la fonction publique, 37-Cadres administratifs et commerciaux d'entreprise et 38-Ingénieurs et cadres techniques d'entreprise. Selon les recommandations du Conseil national de l’information statistique (Cnis) pour les « classes d’emploi », nous ajoutons plusieurs professions intermédiaires du public de catégorie A et apparentées du point du vue du diplôme et/ou du salaire : cadres de santé, cadres du social, cadres de l’armée (cf. AMOSSÉ T., CHARDON O., EIDELMAN A. (2019), _La rénovation de la nomenclature socio-professionnelle_, Paris, Cnis).
+
+    - **Cols blancs subalternes (CBS)** : ce sont les pendants des cadres au niveau de qualification inférieur : agents de maîtrise, techniciens, professions intermédiaires administratives et commerciales (CSP 45 à 48, anciens « cadres moyens » de la nomenclature de 1954).
+
+- **Professions organisées** : elles désignent les métiers les plus reconnus et les plus encadrés juridiquement, généralement soumis à une stricte condition de diplôme : médecins, infirmières, enseignant·es ou encore journalistes (soit l’essentiel des CSP 31, 34, 35, 42 et 43).
+
+- **Exécutant·es** : nous conservons ici les groupes socioprofessionnels habituels, **Ouvriers** et **Employées**. 
+
+De base les **consultants libéraux**, **professions libérales**, **artisans des services**, **petits commerçants**, **artisans ouvriers** sont classés dans les catégories desquelles ils sont les plus proches du point de vue du revenu moyen, du niveau de diplôme et des trajectoires professionnelles. Les indépendants sont ensuite distingués au niveau `PPP2`, sauf parmi les professions organisées qui, dans la nomenclature PCS, contiennent à la fois des salarié·es et des professions libérales. 
+
+Des analyses visant à comparer entreprises et administrations commenceront donc souvent par **exclure les non salarié·es du champ**.
+
+Les **Ouvriers agricoles** sont regroupés avec les **Agriculteurs**, de manière à pouvoir les exclure du champ facilement. 
+
+
+
+### `FAPPP` : onze familles de métier comparables entre public et privé
+
+Les professions des administrations publiques sont ventilées dans les familles professionnelles du secteur marchand (nomenclature FAP), en s'inspirant de la [nomenclature FaPFP des familles de métiers de la fonction publique](https://www.fonction-publique.gouv.fr/files/files/ArchivePortailFP/www.fonction-publique.gouv.fr/la-nomenclature-fapfp-de-familles-de-metiers-de-la-fonction-publique.html) de la DGAFP. 
+
+La famille de métier forme la deuxième lettre du code PcsPP.
+
+**Tableau 2. Onze filières professionnelles transversales**
+```{r, echo = FALSE}
+  tabxplor::tab(ee18_readme_tab, FAPPP, EMP_ADM_ENT, wt = wn, pct = "col", na = "drop")
+```
+
+ <font size=2> Source : INSEE, Enquête Emploi 2018. </font>
+
+ <font size=2> Champ : actifs occupés, France (hors Mayotte).</font>
+
+
+### `PPP2` : CSP détaillées transversales entre public et privé
+
+Au deuxième niveau, la nomenclature des PCS (2 chiffres) distingue les CSP du public, d'une manière qui rend difficile leur comparaison avec les CSP des entreprises.
+
+Le code `PPP2`, à trois chiffres (47 modalités), construit les **catégories les plus détaillées et les plus homogènes possibles regroupant salarié·es du public et salarié·es du privé**.
+
+Il suffit alors de croiser `PPP2` avec une variable distinguant les différents types d'employeurs pour effectuer une comparaison. Croisée avec les filières professionnelles `FAPPP`, elle permet de comparer la hiérarchie interne des métiers de chaque famille entre administrations et entreprises. 
+
+**Tableau 3. Taux de féminisation par CSP recodée et employeur en 2018**
+```{r, echo = FALSE}
+ee18_readme_tab |> 
+  filter(EMP_ADM_ENT %in% c( "Administrations publiques", "Entreprises") & 
+           ! EMP %in% c("7-Ent taille inconnue", "8-Particuliers")) |> 
+    mutate(EMP =  fct_recode(EMP,
+                           "CL"      = "1-Collectivités locales",
+                           "État"    = "2-État"                 ,
+                           "HP"      = "3-Hôpitaux publics"     ,
+                           "EntPub"  = "4-Entreprises publiques",
+                           "PME"     = "5-TPE-PME"              ,
+                           "GE"      = "6-Grandes entreprises"  ,
+                           #"Part"    = "8-Particuliers"         ,
+                           #"7-Ent taille inconnue"   = "7-Ent taille inconnue"  ,
+                           #"I-Pas d’employeur"       = "I-Pas d’employeur"
+    )) |>
+  tabxplor::tab(PPP2, SEXE, c(FAPPP, EMP), wt = n, pct = "row",
+                cleannames = TRUE, na = "drop") |>
+  select(-Total, -Homme) |>
+  filter(Femme$wn >= 50) |> 
+  tab_spread(EMP, names_sort = TRUE) |>
+  select(-Total) |> 
+  
+  mutate(across(where(is_fmt), format)) |> 
+  # group_split() |>
+  # map_dfr(~ add_row(., FAPPP = "", PPP2 = "") ) |>
+  mutate(across(where(is.character), ~ replace_na(., ""))) |> 
+  mutate(across(everything(), ~ if_else(str_detect(PPP2, "^TOTAL"), 
+                                        true  = paste0("<b>", ., "</b>"), 
+                                        false = .)
+                )) |> 
+  ungroup() |> 
+  select(-FAPPP) #|> 
+  #slice(-n())
+```
+
+ <font size=2> Note : CL = collectivités locales ; HP = hôpitaux publics ; EntPub = entreprises publiques ; PME = petites et moyennes entreprises ; GE = grandes entreprises. FiP = Finances publiques ; CBS = cols blancs subalternes ; sf = sages-femmes. </font>
+
+ <font size=2> Source : INSEE, Enquête Emploi 2018. </font>
+
+ <font size=2> Champ : salarié·es des organisations, France (hors Mayotte).</font>
+
+### `PPP2b` : la même chose, en distinguant les différentes catégories d'ouvriers
+
+Dans `PPP2`, la comparaison avec les administrations publiques est simplifiée par le regroupement des ouvriers en une seule catégorie (ils sont aujourd'hui peu nombreux dans le public). `PPP2_det` fournit le détail des différents catégories d'ouvriers, utile pour l'analyse du secteur marchand.
+
+### `PPP3` : regroupements de professions distincts entre public et privé
+
+Le troisième niveau (4 chiffres) est situé entre les CSP et les professions (178 modalités). Il permet au maximum de distinguer entre des professions appartenant aux administrations publiques et des professions appartenant au secteur marchand, selon des catégories un peu plus large et donc plus facilement utilisables que celles des professions détaillées. C'est le niveau de zoom utile maximal pour la comparaison public-privé.
+
+
+### `PPP4` : professions fusionnant les nomenclatures PCS de 1982 et 2003
+
+Les professions détaillées recodées au niveau le plus fin (460 modalités) sont également au maximum séparées entre administrations publiques et secteur marchand. Elles sont surtout utilisées pour construire des professions homogènes dans les versions 1982 et 2003 de la nomenclature des PCS : toutes les variables PcsPP permettent ainsi de faire des comparaisons historiques sur la période 1982-2020. 
+
+
+## Féminisation des noms de professions
+
+Pour rendre visible la place des femmes dans la structure sociale, la règle de féminisation des noms de professions suivante est adoptée par défaut : masculin s’il y a plus de deux tiers d’hommes dans une profession ; féminin s’il y a plus de deux tiers de femmes ; forme inclusive s’il y a entre 33% et 66% de femmes. La fonction `pcspp()` permet de personnaliser l'apparence et les règles de calcul de cette féminisation (cf. la documentation).
+

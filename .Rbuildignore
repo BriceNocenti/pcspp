@@ -2,3 +2,4 @@
 ^pcspp.Rproj$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^README\.Rmd$
