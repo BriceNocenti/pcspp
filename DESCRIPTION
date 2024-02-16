@@ -25,3 +25,5 @@ Imports:
     tidyr (>= 1.0.0),
     tidyselect (>= 1.0.0),
     vctrs (>= 0.3.0)
+URL: https://github.com/BriceNocenti/pcspp
+BugReports: https://github.com/BriceNocenti/pcspp/issues
